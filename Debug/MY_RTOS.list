@@ -1,0 +1,1542 @@
+
+MY_RTOS.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .isr_vector   00000130  08000000  08000000  00010000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .text         00000830  08000130  08000130  00010130  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .rodata       00000024  08000960  08000960  00010960  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  3 .ARM.extab    00000000  08000984  08000984  0001098c  2**0
+                  CONTENTS
+  4 .ARM          00000000  08000984  08000984  0001098c  2**0
+                  CONTENTS
+  5 .preinit_array 00000000  08000984  0800098c  0001098c  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  6 .init_array   00000004  08000984  08000984  00010984  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  7 .fini_array   00000004  08000988  08000988  00010988  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  8 .data         00000000  20000000  20000000  0001098c  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  9 .bss          00000514  20000000  0800098c  00020000  2**2
+                  ALLOC
+ 10 ._user_heap_stack 00000604  20000514  0800098c  00020514  2**0
+                  ALLOC
+ 11 .ARM.attributes 00000029  00000000  00000000  0001098c  2**0
+                  CONTENTS, READONLY
+ 12 .debug_info   000061ef  00000000  00000000  000109b5  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 13 .debug_abbrev 00000f72  00000000  00000000  00016ba4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 14 .debug_loc    00001404  00000000  00000000  00017b16  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 15 .debug_aranges 00000318  00000000  00000000  00018f20  2**3
+                  CONTENTS, READONLY, DEBUGGING
+ 16 .debug_ranges 00000290  00000000  00000000  00019238  2**3
+                  CONTENTS, READONLY, DEBUGGING
+ 17 .debug_macro  00002c0c  00000000  00000000  000194c8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 18 .debug_line   00003831  00000000  00000000  0001c0d4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 19 .debug_str    00014428  00000000  00000000  0001f905  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 20 .comment      0000007b  00000000  00000000  00033d2d  2**0
+                  CONTENTS, READONLY
+ 21 .debug_frame  00000a24  00000000  00000000  00033da8  2**2
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+08000130 <__do_global_dtors_aux>:
+ 8000130:	b510      	push	{r4, lr}
+ 8000132:	4c05      	ldr	r4, [pc, #20]	; (8000148 <__do_global_dtors_aux+0x18>)
+ 8000134:	7823      	ldrb	r3, [r4, #0]
+ 8000136:	b933      	cbnz	r3, 8000146 <__do_global_dtors_aux+0x16>
+ 8000138:	4b04      	ldr	r3, [pc, #16]	; (800014c <__do_global_dtors_aux+0x1c>)
+ 800013a:	b113      	cbz	r3, 8000142 <__do_global_dtors_aux+0x12>
+ 800013c:	4804      	ldr	r0, [pc, #16]	; (8000150 <__do_global_dtors_aux+0x20>)
+ 800013e:	f3af 8000 	nop.w
+ 8000142:	2301      	movs	r3, #1
+ 8000144:	7023      	strb	r3, [r4, #0]
+ 8000146:	bd10      	pop	{r4, pc}
+ 8000148:	20000000 	.word	0x20000000
+ 800014c:	00000000 	.word	0x00000000
+ 8000150:	08000948 	.word	0x08000948
+
+08000154 <frame_dummy>:
+ 8000154:	b508      	push	{r3, lr}
+ 8000156:	4b03      	ldr	r3, [pc, #12]	; (8000164 <frame_dummy+0x10>)
+ 8000158:	b11b      	cbz	r3, 8000162 <frame_dummy+0xe>
+ 800015a:	4903      	ldr	r1, [pc, #12]	; (8000168 <frame_dummy+0x14>)
+ 800015c:	4803      	ldr	r0, [pc, #12]	; (800016c <frame_dummy+0x18>)
+ 800015e:	f3af 8000 	nop.w
+ 8000162:	bd08      	pop	{r3, pc}
+ 8000164:	00000000 	.word	0x00000000
+ 8000168:	20000004 	.word	0x20000004
+ 800016c:	08000948 	.word	0x08000948
+
+08000170 <EXTI0_IRQHandler>:
+///**===========			ISR  Functions        =========================
+///**================================================================
+// */
+
+void EXTI0_IRQHandler (void)
+{
+ 8000170:	b580      	push	{r7, lr}
+ 8000172:	af00      	add	r7, sp, #0
+	//cleared by writing a ‘1’ into the bit Pending register (EXTI_PR)
+	EXTI->PR |= 1<<0 ;
+ 8000174:	4b05      	ldr	r3, [pc, #20]	; (800018c <EXTI0_IRQHandler+0x1c>)
+ 8000176:	695b      	ldr	r3, [r3, #20]
+ 8000178:	4a04      	ldr	r2, [pc, #16]	; (800018c <EXTI0_IRQHandler+0x1c>)
+ 800017a:	f043 0301 	orr.w	r3, r3, #1
+ 800017e:	6153      	str	r3, [r2, #20]
+	//CALL IRQ_CALL
+	GP_IRQ_CallBack[0]() ;
+ 8000180:	4b03      	ldr	r3, [pc, #12]	; (8000190 <EXTI0_IRQHandler+0x20>)
+ 8000182:	681b      	ldr	r3, [r3, #0]
+ 8000184:	4798      	blx	r3
+}
+ 8000186:	bf00      	nop
+ 8000188:	bd80      	pop	{r7, pc}
+ 800018a:	bf00      	nop
+ 800018c:	40010400 	.word	0x40010400
+ 8000190:	20000078 	.word	0x20000078
+
+08000194 <EXTI1_IRQHandler>:
+
+void EXTI1_IRQHandler (void) {
+ 8000194:	b580      	push	{r7, lr}
+ 8000196:	af00      	add	r7, sp, #0
+	EXTI->PR |=  (1<<1) ;
+ 8000198:	4b05      	ldr	r3, [pc, #20]	; (80001b0 <EXTI1_IRQHandler+0x1c>)
+ 800019a:	695b      	ldr	r3, [r3, #20]
+ 800019c:	4a04      	ldr	r2, [pc, #16]	; (80001b0 <EXTI1_IRQHandler+0x1c>)
+ 800019e:	f043 0302 	orr.w	r3, r3, #2
+ 80001a2:	6153      	str	r3, [r2, #20]
+
+	GP_IRQ_CallBack[1]() ; }
+ 80001a4:	4b03      	ldr	r3, [pc, #12]	; (80001b4 <EXTI1_IRQHandler+0x20>)
+ 80001a6:	685b      	ldr	r3, [r3, #4]
+ 80001a8:	4798      	blx	r3
+ 80001aa:	bf00      	nop
+ 80001ac:	bd80      	pop	{r7, pc}
+ 80001ae:	bf00      	nop
+ 80001b0:	40010400 	.word	0x40010400
+ 80001b4:	20000078 	.word	0x20000078
+
+080001b8 <EXTI2_IRQHandler>:
+
+
+void EXTI2_IRQHandler (void) {
+ 80001b8:	b580      	push	{r7, lr}
+ 80001ba:	af00      	add	r7, sp, #0
+	EXTI->PR |=  (1<<2) ;
+ 80001bc:	4b05      	ldr	r3, [pc, #20]	; (80001d4 <EXTI2_IRQHandler+0x1c>)
+ 80001be:	695b      	ldr	r3, [r3, #20]
+ 80001c0:	4a04      	ldr	r2, [pc, #16]	; (80001d4 <EXTI2_IRQHandler+0x1c>)
+ 80001c2:	f043 0304 	orr.w	r3, r3, #4
+ 80001c6:	6153      	str	r3, [r2, #20]
+
+	GP_IRQ_CallBack[2]() ; }
+ 80001c8:	4b03      	ldr	r3, [pc, #12]	; (80001d8 <EXTI2_IRQHandler+0x20>)
+ 80001ca:	689b      	ldr	r3, [r3, #8]
+ 80001cc:	4798      	blx	r3
+ 80001ce:	bf00      	nop
+ 80001d0:	bd80      	pop	{r7, pc}
+ 80001d2:	bf00      	nop
+ 80001d4:	40010400 	.word	0x40010400
+ 80001d8:	20000078 	.word	0x20000078
+
+080001dc <EXTI3_IRQHandler>:
+
+
+void EXTI3_IRQHandler (void) {
+ 80001dc:	b580      	push	{r7, lr}
+ 80001de:	af00      	add	r7, sp, #0
+	EXTI->PR |=  (1<<3) ;
+ 80001e0:	4b05      	ldr	r3, [pc, #20]	; (80001f8 <EXTI3_IRQHandler+0x1c>)
+ 80001e2:	695b      	ldr	r3, [r3, #20]
+ 80001e4:	4a04      	ldr	r2, [pc, #16]	; (80001f8 <EXTI3_IRQHandler+0x1c>)
+ 80001e6:	f043 0308 	orr.w	r3, r3, #8
+ 80001ea:	6153      	str	r3, [r2, #20]
+
+	GP_IRQ_CallBack[3]() ; }
+ 80001ec:	4b03      	ldr	r3, [pc, #12]	; (80001fc <EXTI3_IRQHandler+0x20>)
+ 80001ee:	68db      	ldr	r3, [r3, #12]
+ 80001f0:	4798      	blx	r3
+ 80001f2:	bf00      	nop
+ 80001f4:	bd80      	pop	{r7, pc}
+ 80001f6:	bf00      	nop
+ 80001f8:	40010400 	.word	0x40010400
+ 80001fc:	20000078 	.word	0x20000078
+
+08000200 <EXTI4_IRQHandler>:
+
+
+void EXTI4_IRQHandler (void) {
+ 8000200:	b580      	push	{r7, lr}
+ 8000202:	af00      	add	r7, sp, #0
+	EXTI->PR |=  (1<<4) ;
+ 8000204:	4b05      	ldr	r3, [pc, #20]	; (800021c <EXTI4_IRQHandler+0x1c>)
+ 8000206:	695b      	ldr	r3, [r3, #20]
+ 8000208:	4a04      	ldr	r2, [pc, #16]	; (800021c <EXTI4_IRQHandler+0x1c>)
+ 800020a:	f043 0310 	orr.w	r3, r3, #16
+ 800020e:	6153      	str	r3, [r2, #20]
+	GP_IRQ_CallBack[4]() ; }
+ 8000210:	4b03      	ldr	r3, [pc, #12]	; (8000220 <EXTI4_IRQHandler+0x20>)
+ 8000212:	691b      	ldr	r3, [r3, #16]
+ 8000214:	4798      	blx	r3
+ 8000216:	bf00      	nop
+ 8000218:	bd80      	pop	{r7, pc}
+ 800021a:	bf00      	nop
+ 800021c:	40010400 	.word	0x40010400
+ 8000220:	20000078 	.word	0x20000078
+
+08000224 <EXTI9_5_IRQHandler>:
+
+
+void EXTI9_5_IRQHandler (void)
+{
+ 8000224:	b580      	push	{r7, lr}
+ 8000226:	af00      	add	r7, sp, #0
+	if (EXTI->PR & 1<<5 ) {	EXTI->PR |=  (1<<5)    ; GP_IRQ_CallBack[5]() ;   }
+ 8000228:	4b26      	ldr	r3, [pc, #152]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 800022a:	695b      	ldr	r3, [r3, #20]
+ 800022c:	f003 0320 	and.w	r3, r3, #32
+ 8000230:	2b00      	cmp	r3, #0
+ 8000232:	d008      	beq.n	8000246 <EXTI9_5_IRQHandler+0x22>
+ 8000234:	4b23      	ldr	r3, [pc, #140]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000236:	695b      	ldr	r3, [r3, #20]
+ 8000238:	4a22      	ldr	r2, [pc, #136]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 800023a:	f043 0320 	orr.w	r3, r3, #32
+ 800023e:	6153      	str	r3, [r2, #20]
+ 8000240:	4b21      	ldr	r3, [pc, #132]	; (80002c8 <EXTI9_5_IRQHandler+0xa4>)
+ 8000242:	695b      	ldr	r3, [r3, #20]
+ 8000244:	4798      	blx	r3
+	if (EXTI->PR & 1<<6 ) {	EXTI->PR |=  (1<<6)    ; GP_IRQ_CallBack[6]() ;   }
+ 8000246:	4b1f      	ldr	r3, [pc, #124]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000248:	695b      	ldr	r3, [r3, #20]
+ 800024a:	f003 0340 	and.w	r3, r3, #64	; 0x40
+ 800024e:	2b00      	cmp	r3, #0
+ 8000250:	d008      	beq.n	8000264 <EXTI9_5_IRQHandler+0x40>
+ 8000252:	4b1c      	ldr	r3, [pc, #112]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000254:	695b      	ldr	r3, [r3, #20]
+ 8000256:	4a1b      	ldr	r2, [pc, #108]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000258:	f043 0340 	orr.w	r3, r3, #64	; 0x40
+ 800025c:	6153      	str	r3, [r2, #20]
+ 800025e:	4b1a      	ldr	r3, [pc, #104]	; (80002c8 <EXTI9_5_IRQHandler+0xa4>)
+ 8000260:	699b      	ldr	r3, [r3, #24]
+ 8000262:	4798      	blx	r3
+	if (EXTI->PR & 1<<7 ) {	EXTI->PR |=  (1<<7)    ; GP_IRQ_CallBack[7]() ;   }
+ 8000264:	4b17      	ldr	r3, [pc, #92]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000266:	695b      	ldr	r3, [r3, #20]
+ 8000268:	f003 0380 	and.w	r3, r3, #128	; 0x80
+ 800026c:	2b00      	cmp	r3, #0
+ 800026e:	d008      	beq.n	8000282 <EXTI9_5_IRQHandler+0x5e>
+ 8000270:	4b14      	ldr	r3, [pc, #80]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000272:	695b      	ldr	r3, [r3, #20]
+ 8000274:	4a13      	ldr	r2, [pc, #76]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000276:	f043 0380 	orr.w	r3, r3, #128	; 0x80
+ 800027a:	6153      	str	r3, [r2, #20]
+ 800027c:	4b12      	ldr	r3, [pc, #72]	; (80002c8 <EXTI9_5_IRQHandler+0xa4>)
+ 800027e:	69db      	ldr	r3, [r3, #28]
+ 8000280:	4798      	blx	r3
+	if (EXTI->PR & 1<<8 ) {	EXTI->PR |=  (1<<8)    ; GP_IRQ_CallBack[8]() ;   }
+ 8000282:	4b10      	ldr	r3, [pc, #64]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000284:	695b      	ldr	r3, [r3, #20]
+ 8000286:	f403 7380 	and.w	r3, r3, #256	; 0x100
+ 800028a:	2b00      	cmp	r3, #0
+ 800028c:	d008      	beq.n	80002a0 <EXTI9_5_IRQHandler+0x7c>
+ 800028e:	4b0d      	ldr	r3, [pc, #52]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000290:	695b      	ldr	r3, [r3, #20]
+ 8000292:	4a0c      	ldr	r2, [pc, #48]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000294:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 8000298:	6153      	str	r3, [r2, #20]
+ 800029a:	4b0b      	ldr	r3, [pc, #44]	; (80002c8 <EXTI9_5_IRQHandler+0xa4>)
+ 800029c:	6a1b      	ldr	r3, [r3, #32]
+ 800029e:	4798      	blx	r3
+	if (EXTI->PR & 1<<9 ) {	EXTI->PR |=  (1<<9)    ; GP_IRQ_CallBack[9]() ;   }
+ 80002a0:	4b08      	ldr	r3, [pc, #32]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 80002a2:	695b      	ldr	r3, [r3, #20]
+ 80002a4:	f403 7300 	and.w	r3, r3, #512	; 0x200
+ 80002a8:	2b00      	cmp	r3, #0
+ 80002aa:	d008      	beq.n	80002be <EXTI9_5_IRQHandler+0x9a>
+ 80002ac:	4b05      	ldr	r3, [pc, #20]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 80002ae:	695b      	ldr	r3, [r3, #20]
+ 80002b0:	4a04      	ldr	r2, [pc, #16]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 80002b2:	f443 7300 	orr.w	r3, r3, #512	; 0x200
+ 80002b6:	6153      	str	r3, [r2, #20]
+ 80002b8:	4b03      	ldr	r3, [pc, #12]	; (80002c8 <EXTI9_5_IRQHandler+0xa4>)
+ 80002ba:	6a5b      	ldr	r3, [r3, #36]	; 0x24
+ 80002bc:	4798      	blx	r3
+
+}
+ 80002be:	bf00      	nop
+ 80002c0:	bd80      	pop	{r7, pc}
+ 80002c2:	bf00      	nop
+ 80002c4:	40010400 	.word	0x40010400
+ 80002c8:	20000078 	.word	0x20000078
+
+080002cc <EXTI15_10_IRQHandler>:
+void EXTI15_10_IRQHandler (void)
+{
+ 80002cc:	b580      	push	{r7, lr}
+ 80002ce:	af00      	add	r7, sp, #0
+	if (EXTI->PR & 1<<10 ) {	EXTI->PR |=  (1<<10)    ; GP_IRQ_CallBack[10]() ;   }
+ 80002d0:	4b2d      	ldr	r3, [pc, #180]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 80002d2:	695b      	ldr	r3, [r3, #20]
+ 80002d4:	f403 6380 	and.w	r3, r3, #1024	; 0x400
+ 80002d8:	2b00      	cmp	r3, #0
+ 80002da:	d008      	beq.n	80002ee <EXTI15_10_IRQHandler+0x22>
+ 80002dc:	4b2a      	ldr	r3, [pc, #168]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 80002de:	695b      	ldr	r3, [r3, #20]
+ 80002e0:	4a29      	ldr	r2, [pc, #164]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 80002e2:	f443 6380 	orr.w	r3, r3, #1024	; 0x400
+ 80002e6:	6153      	str	r3, [r2, #20]
+ 80002e8:	4b28      	ldr	r3, [pc, #160]	; (800038c <EXTI15_10_IRQHandler+0xc0>)
+ 80002ea:	6a9b      	ldr	r3, [r3, #40]	; 0x28
+ 80002ec:	4798      	blx	r3
+	if (EXTI->PR & 1<<11 ) {	EXTI->PR |=  (1<<11)    ; GP_IRQ_CallBack[11]() ;   }
+ 80002ee:	4b26      	ldr	r3, [pc, #152]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 80002f0:	695b      	ldr	r3, [r3, #20]
+ 80002f2:	f403 6300 	and.w	r3, r3, #2048	; 0x800
+ 80002f6:	2b00      	cmp	r3, #0
+ 80002f8:	d008      	beq.n	800030c <EXTI15_10_IRQHandler+0x40>
+ 80002fa:	4b23      	ldr	r3, [pc, #140]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 80002fc:	695b      	ldr	r3, [r3, #20]
+ 80002fe:	4a22      	ldr	r2, [pc, #136]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 8000300:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 8000304:	6153      	str	r3, [r2, #20]
+ 8000306:	4b21      	ldr	r3, [pc, #132]	; (800038c <EXTI15_10_IRQHandler+0xc0>)
+ 8000308:	6adb      	ldr	r3, [r3, #44]	; 0x2c
+ 800030a:	4798      	blx	r3
+	if (EXTI->PR & 1<<12 ) {	EXTI->PR |=  (1<<12)    ; GP_IRQ_CallBack[12]() ;   }
+ 800030c:	4b1e      	ldr	r3, [pc, #120]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 800030e:	695b      	ldr	r3, [r3, #20]
+ 8000310:	f403 5380 	and.w	r3, r3, #4096	; 0x1000
+ 8000314:	2b00      	cmp	r3, #0
+ 8000316:	d008      	beq.n	800032a <EXTI15_10_IRQHandler+0x5e>
+ 8000318:	4b1b      	ldr	r3, [pc, #108]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 800031a:	695b      	ldr	r3, [r3, #20]
+ 800031c:	4a1a      	ldr	r2, [pc, #104]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 800031e:	f443 5380 	orr.w	r3, r3, #4096	; 0x1000
+ 8000322:	6153      	str	r3, [r2, #20]
+ 8000324:	4b19      	ldr	r3, [pc, #100]	; (800038c <EXTI15_10_IRQHandler+0xc0>)
+ 8000326:	6b1b      	ldr	r3, [r3, #48]	; 0x30
+ 8000328:	4798      	blx	r3
+	if (EXTI->PR & 1<<13 ) {	EXTI->PR |=  (1<<13)    ; GP_IRQ_CallBack[13]() ;   }
+ 800032a:	4b17      	ldr	r3, [pc, #92]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 800032c:	695b      	ldr	r3, [r3, #20]
+ 800032e:	f403 5300 	and.w	r3, r3, #8192	; 0x2000
+ 8000332:	2b00      	cmp	r3, #0
+ 8000334:	d008      	beq.n	8000348 <EXTI15_10_IRQHandler+0x7c>
+ 8000336:	4b14      	ldr	r3, [pc, #80]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 8000338:	695b      	ldr	r3, [r3, #20]
+ 800033a:	4a13      	ldr	r2, [pc, #76]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 800033c:	f443 5300 	orr.w	r3, r3, #8192	; 0x2000
+ 8000340:	6153      	str	r3, [r2, #20]
+ 8000342:	4b12      	ldr	r3, [pc, #72]	; (800038c <EXTI15_10_IRQHandler+0xc0>)
+ 8000344:	6b5b      	ldr	r3, [r3, #52]	; 0x34
+ 8000346:	4798      	blx	r3
+	if (EXTI->PR & 1<<14 ) {	EXTI->PR |=  (1<<14)    ; GP_IRQ_CallBack[14]() ;   }
+ 8000348:	4b0f      	ldr	r3, [pc, #60]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 800034a:	695b      	ldr	r3, [r3, #20]
+ 800034c:	f403 4380 	and.w	r3, r3, #16384	; 0x4000
+ 8000350:	2b00      	cmp	r3, #0
+ 8000352:	d008      	beq.n	8000366 <EXTI15_10_IRQHandler+0x9a>
+ 8000354:	4b0c      	ldr	r3, [pc, #48]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 8000356:	695b      	ldr	r3, [r3, #20]
+ 8000358:	4a0b      	ldr	r2, [pc, #44]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 800035a:	f443 4380 	orr.w	r3, r3, #16384	; 0x4000
+ 800035e:	6153      	str	r3, [r2, #20]
+ 8000360:	4b0a      	ldr	r3, [pc, #40]	; (800038c <EXTI15_10_IRQHandler+0xc0>)
+ 8000362:	6b9b      	ldr	r3, [r3, #56]	; 0x38
+ 8000364:	4798      	blx	r3
+	if (EXTI->PR & 1<<15 ) {	EXTI->PR |=  (1<<15)    ; GP_IRQ_CallBack[15]() ;   }
+ 8000366:	4b08      	ldr	r3, [pc, #32]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 8000368:	695b      	ldr	r3, [r3, #20]
+ 800036a:	f403 4300 	and.w	r3, r3, #32768	; 0x8000
+ 800036e:	2b00      	cmp	r3, #0
+ 8000370:	d008      	beq.n	8000384 <EXTI15_10_IRQHandler+0xb8>
+ 8000372:	4b05      	ldr	r3, [pc, #20]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 8000374:	695b      	ldr	r3, [r3, #20]
+ 8000376:	4a04      	ldr	r2, [pc, #16]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 8000378:	f443 4300 	orr.w	r3, r3, #32768	; 0x8000
+ 800037c:	6153      	str	r3, [r2, #20]
+ 800037e:	4b03      	ldr	r3, [pc, #12]	; (800038c <EXTI15_10_IRQHandler+0xc0>)
+ 8000380:	6bdb      	ldr	r3, [r3, #60]	; 0x3c
+ 8000382:	4798      	blx	r3
+
+}
+ 8000384:	bf00      	nop
+ 8000386:	bd80      	pop	{r7, pc}
+ 8000388:	40010400 	.word	0x40010400
+ 800038c:	20000078 	.word	0x20000078
+
+08000390 <I2C1_ER_IRQHandler>:
+	return (uint8_t) I2Cx->DR;
+}
+
+
+void I2C1_ER_IRQHandler (void)
+{
+ 8000390:	b480      	push	{r7}
+ 8000392:	af00      	add	r7, sp, #0
+
+}
+ 8000394:	bf00      	nop
+ 8000396:	46bd      	mov	sp, r7
+ 8000398:	bc80      	pop	{r7}
+ 800039a:	4770      	bx	lr
+
+0800039c <I2C1_EV_IRQHandler>:
+
+void I2C1_EV_IRQHandler (void)
+{
+ 800039c:	b580      	push	{r7, lr}
+ 800039e:	b086      	sub	sp, #24
+ 80003a0:	af00      	add	r7, sp, #0
+	volatile uint32_t dummy_read = 0 ;
+ 80003a2:	2300      	movs	r3, #0
+ 80003a4:	607b      	str	r3, [r7, #4]
+	I2C_TypeDef* I2Cx = I2C1 ;
+ 80003a6:	4b37      	ldr	r3, [pc, #220]	; (8000484 <I2C1_EV_IRQHandler+0xe8>)
+ 80003a8:	617b      	str	r3, [r7, #20]
+	//Interrupt handling for both master and slave mode of a device
+	uint32_t temp1, temp2, temp3;
+
+	temp1   = I2Cx->CR2 & (  I2C_CR2_ITEVTEN) ;
+ 80003aa:	697b      	ldr	r3, [r7, #20]
+ 80003ac:	685b      	ldr	r3, [r3, #4]
+ 80003ae:	f403 7300 	and.w	r3, r3, #512	; 0x200
+ 80003b2:	613b      	str	r3, [r7, #16]
+	temp2   = I2Cx->CR2 & ( I2C_CR2_ITBUFEN) ;
+ 80003b4:	697b      	ldr	r3, [r7, #20]
+ 80003b6:	685b      	ldr	r3, [r3, #4]
+ 80003b8:	f403 6380 	and.w	r3, r3, #1024	; 0x400
+ 80003bc:	60fb      	str	r3, [r7, #12]
+	temp3  = I2Cx->SR1 & ( I2C_SR1_STOPF);
+ 80003be:	697b      	ldr	r3, [r7, #20]
+ 80003c0:	695b      	ldr	r3, [r3, #20]
+ 80003c2:	f003 0310 	and.w	r3, r3, #16
+ 80003c6:	60bb      	str	r3, [r7, #8]
+
+
+	// Handle For interrupt generated by STOPF event
+		// Note : Stop detection flag is applicable only slave mode
+		if(temp1 && temp3)
+ 80003c8:	693b      	ldr	r3, [r7, #16]
+ 80003ca:	2b00      	cmp	r3, #0
+ 80003cc:	d00a      	beq.n	80003e4 <I2C1_EV_IRQHandler+0x48>
+ 80003ce:	68bb      	ldr	r3, [r7, #8]
+ 80003d0:	2b00      	cmp	r3, #0
+ 80003d2:	d007      	beq.n	80003e4 <I2C1_EV_IRQHandler+0x48>
+		{
+			//STOF flag is set
+			//Clear the STOPF ( i.e 1) read SR1 2) Write to CR1 )
+			I2Cx->CR1 |= 0x0000;
+ 80003d4:	697b      	ldr	r3, [r7, #20]
+ 80003d6:	681a      	ldr	r2, [r3, #0]
+ 80003d8:	697b      	ldr	r3, [r7, #20]
+ 80003da:	601a      	str	r2, [r3, #0]
+			Slave_States(I2Cx,I2C_EV_STOP);
+ 80003dc:	2100      	movs	r1, #0
+ 80003de:	6978      	ldr	r0, [r7, #20]
+ 80003e0:	f000 f852 	bl	8000488 <Slave_States>
+
+
+		}
+		//----------------------------------------------------------
+		temp3  = I2Cx->SR1 & (I2C_SR1_ADDR);
+ 80003e4:	697b      	ldr	r3, [r7, #20]
+ 80003e6:	695b      	ldr	r3, [r3, #20]
+ 80003e8:	f003 0302 	and.w	r3, r3, #2
+ 80003ec:	60bb      	str	r3, [r7, #8]
+		// Handle For interrupt generated by ADDR event
+		//Note : When master mode : Address is sent
+		//		 When Slave mode   : Address matched with own address
+		if(temp1 && temp3)
+ 80003ee:	693b      	ldr	r3, [r7, #16]
+ 80003f0:	2b00      	cmp	r3, #0
+ 80003f2:	d012      	beq.n	800041a <I2C1_EV_IRQHandler+0x7e>
+ 80003f4:	68bb      	ldr	r3, [r7, #8]
+ 80003f6:	2b00      	cmp	r3, #0
+ 80003f8:	d00f      	beq.n	800041a <I2C1_EV_IRQHandler+0x7e>
+		{
+			// interrupt is generated because of ADDR event
+			//check for device mode
+			if(I2Cx->SR2 & ( I2C_SR2_MSL))
+ 80003fa:	697b      	ldr	r3, [r7, #20]
+ 80003fc:	699b      	ldr	r3, [r3, #24]
+ 80003fe:	f003 0301 	and.w	r3, r3, #1
+ 8000402:	2b00      	cmp	r3, #0
+ 8000404:	d109      	bne.n	800041a <I2C1_EV_IRQHandler+0x7e>
+
+			}else
+			{
+				//slave mode
+				//clear the ADDR flag ( read SR1 , read SR2)
+				dummy_read = I2Cx->SR1;
+ 8000406:	697b      	ldr	r3, [r7, #20]
+ 8000408:	695b      	ldr	r3, [r3, #20]
+ 800040a:	607b      	str	r3, [r7, #4]
+				dummy_read = I2Cx->SR2;
+ 800040c:	697b      	ldr	r3, [r7, #20]
+ 800040e:	699b      	ldr	r3, [r3, #24]
+ 8000410:	607b      	str	r3, [r7, #4]
+				Slave_States(I2Cx,I2C_EV_ADDR_Matched);
+ 8000412:	2102      	movs	r1, #2
+ 8000414:	6978      	ldr	r0, [r7, #20]
+ 8000416:	f000 f837 	bl	8000488 <Slave_States>
+
+			}
+		}
+		//----------------------------------------------------------
+
+		temp3  = I2Cx->SR1 & ( I2C_SR1_TXE);
+ 800041a:	697b      	ldr	r3, [r7, #20]
+ 800041c:	695b      	ldr	r3, [r3, #20]
+ 800041e:	f003 0380 	and.w	r3, r3, #128	; 0x80
+ 8000422:	60bb      	str	r3, [r7, #8]
+		// Handle For interrupt generated by TXE event
+		if(temp1 && temp2 && temp3)
+ 8000424:	693b      	ldr	r3, [r7, #16]
+ 8000426:	2b00      	cmp	r3, #0
+ 8000428:	d00f      	beq.n	800044a <I2C1_EV_IRQHandler+0xae>
+ 800042a:	68fb      	ldr	r3, [r7, #12]
+ 800042c:	2b00      	cmp	r3, #0
+ 800042e:	d00c      	beq.n	800044a <I2C1_EV_IRQHandler+0xae>
+ 8000430:	68bb      	ldr	r3, [r7, #8]
+ 8000432:	2b00      	cmp	r3, #0
+ 8000434:	d009      	beq.n	800044a <I2C1_EV_IRQHandler+0xae>
+		{
+			//Check for device mode
+			if(I2Cx->SR2 & (I2C_SR2_MSL))
+ 8000436:	697b      	ldr	r3, [r7, #20]
+ 8000438:	699b      	ldr	r3, [r3, #24]
+ 800043a:	f003 0301 	and.w	r3, r3, #1
+ 800043e:	2b00      	cmp	r3, #0
+ 8000440:	d103      	bne.n	800044a <I2C1_EV_IRQHandler+0xae>
+			{
+
+			}else
+			{
+				//slave
+				Slave_States(I2Cx,I2C_EV_DATA_REQ);
+ 8000442:	2103      	movs	r1, #3
+ 8000444:	6978      	ldr	r0, [r7, #20]
+ 8000446:	f000 f81f 	bl	8000488 <Slave_States>
+			}
+		}
+
+		//----------------------------------------------------------
+
+		temp3  = I2Cx->SR1 & ( I2C_SR1_RXNE);
+ 800044a:	697b      	ldr	r3, [r7, #20]
+ 800044c:	695b      	ldr	r3, [r3, #20]
+ 800044e:	f003 0340 	and.w	r3, r3, #64	; 0x40
+ 8000452:	60bb      	str	r3, [r7, #8]
+		// Handle For interrupt generated by 	SB=1, cleared by reading SR1 register followed by writing DR register with Address.
+		if(temp1 && temp2 && temp3)
+ 8000454:	693b      	ldr	r3, [r7, #16]
+ 8000456:	2b00      	cmp	r3, #0
+ 8000458:	d00f      	beq.n	800047a <I2C1_EV_IRQHandler+0xde>
+ 800045a:	68fb      	ldr	r3, [r7, #12]
+ 800045c:	2b00      	cmp	r3, #0
+ 800045e:	d00c      	beq.n	800047a <I2C1_EV_IRQHandler+0xde>
+ 8000460:	68bb      	ldr	r3, [r7, #8]
+ 8000462:	2b00      	cmp	r3, #0
+ 8000464:	d009      	beq.n	800047a <I2C1_EV_IRQHandler+0xde>
+		{
+			//check device mode .
+			if(I2Cx->SR2 & ( I2C_SR2_MSL))
+ 8000466:	697b      	ldr	r3, [r7, #20]
+ 8000468:	699b      	ldr	r3, [r3, #24]
+ 800046a:	f003 0301 	and.w	r3, r3, #1
+ 800046e:	2b00      	cmp	r3, #0
+ 8000470:	d103      	bne.n	800047a <I2C1_EV_IRQHandler+0xde>
+				//The device is master
+
+			}else
+			{
+				//slave
+				Slave_States(I2Cx,I2C_EV_DATA_RCV);
+ 8000472:	2104      	movs	r1, #4
+ 8000474:	6978      	ldr	r0, [r7, #20]
+ 8000476:	f000 f807 	bl	8000488 <Slave_States>
+			}
+		}
+
+
+
+}
+ 800047a:	bf00      	nop
+ 800047c:	3718      	adds	r7, #24
+ 800047e:	46bd      	mov	sp, r7
+ 8000480:	bd80      	pop	{r7, pc}
+ 8000482:	bf00      	nop
+ 8000484:	40005400 	.word	0x40005400
+
+08000488 <Slave_States>:
+
+
+void Slave_States (I2C_TypeDef* I2Cx  ,Slave_State state)
+{
+ 8000488:	b580      	push	{r7, lr}
+ 800048a:	b084      	sub	sp, #16
+ 800048c:	af00      	add	r7, sp, #0
+ 800048e:	6078      	str	r0, [r7, #4]
+ 8000490:	460b      	mov	r3, r1
+ 8000492:	70fb      	strb	r3, [r7, #3]
+	uint8_t index =    I2Cx == I2C1 ? I2C1_INDEX: I2C2_INDEX ;
+ 8000494:	687b      	ldr	r3, [r7, #4]
+ 8000496:	4a32      	ldr	r2, [pc, #200]	; (8000560 <Slave_States+0xd8>)
+ 8000498:	4293      	cmp	r3, r2
+ 800049a:	bf14      	ite	ne
+ 800049c:	2301      	movne	r3, #1
+ 800049e:	2300      	moveq	r3, #0
+ 80004a0:	b2db      	uxtb	r3, r3
+ 80004a2:	73fb      	strb	r3, [r7, #15]
+
+	switch (state)
+ 80004a4:	78fb      	ldrb	r3, [r7, #3]
+ 80004a6:	2b04      	cmp	r3, #4
+ 80004a8:	d856      	bhi.n	8000558 <Slave_States+0xd0>
+ 80004aa:	a201      	add	r2, pc, #4	; (adr r2, 80004b0 <Slave_States+0x28>)
+ 80004ac:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 80004b0:	080004cb 	.word	0x080004cb
+ 80004b4:	080004c5 	.word	0x080004c5
+ 80004b8:	080004ef 	.word	0x080004ef
+ 80004bc:	08000507 	.word	0x08000507
+ 80004c0:	0800052b 	.word	0x0800052b
+	{
+
+	case I2C_ERROR_AF:
+	{
+		//make sure that the slave is really in transmitter mode
+		if(I2Cx->SR2 & ( I2C_SR2_TRA))
+ 80004c4:	687b      	ldr	r3, [r7, #4]
+ 80004c6:	699b      	ldr	r3, [r3, #24]
+		{
+			//Slave Shouldn't Send anything else
+
+		}
+
+		break ;
+ 80004c8:	e046      	b.n	8000558 <Slave_States+0xd0>
+	}
+
+	case I2C_EV_STOP:
+	{
+		//make sure that the slave is really in transmitter mode
+		if(I2Cx->SR2 & ( I2C_SR2_TRA))
+ 80004ca:	687b      	ldr	r3, [r7, #4]
+ 80004cc:	699b      	ldr	r3, [r3, #24]
+ 80004ce:	f003 0304 	and.w	r3, r3, #4
+ 80004d2:	2b00      	cmp	r3, #0
+ 80004d4:	d03b      	beq.n	800054e <Slave_States+0xc6>
+		{
+			//Notify APP that the Stop Condition is sent by the master
+			Global_I2C_Config [index].P_Slave_Event_CallBack (I2C_EV_STOP) ;
+ 80004d6:	7bfa      	ldrb	r2, [r7, #15]
+ 80004d8:	4922      	ldr	r1, [pc, #136]	; (8000564 <Slave_States+0xdc>)
+ 80004da:	4613      	mov	r3, r2
+ 80004dc:	00db      	lsls	r3, r3, #3
+ 80004de:	4413      	add	r3, r2
+ 80004e0:	009b      	lsls	r3, r3, #2
+ 80004e2:	440b      	add	r3, r1
+ 80004e4:	3320      	adds	r3, #32
+ 80004e6:	681b      	ldr	r3, [r3, #0]
+ 80004e8:	2000      	movs	r0, #0
+ 80004ea:	4798      	blx	r3
+		}
+
+		break ;
+ 80004ec:	e02f      	b.n	800054e <Slave_States+0xc6>
+	}
+
+	case I2C_EV_ADDR_Matched:
+	{
+		//Notify APP that the Stop Condition is sent by the master
+		Global_I2C_Config [index].P_Slave_Event_CallBack (I2C_EV_ADDR_Matched) ;
+ 80004ee:	7bfa      	ldrb	r2, [r7, #15]
+ 80004f0:	491c      	ldr	r1, [pc, #112]	; (8000564 <Slave_States+0xdc>)
+ 80004f2:	4613      	mov	r3, r2
+ 80004f4:	00db      	lsls	r3, r3, #3
+ 80004f6:	4413      	add	r3, r2
+ 80004f8:	009b      	lsls	r3, r3, #2
+ 80004fa:	440b      	add	r3, r1
+ 80004fc:	3320      	adds	r3, #32
+ 80004fe:	681b      	ldr	r3, [r3, #0]
+ 8000500:	2002      	movs	r0, #2
+ 8000502:	4798      	blx	r3
+
+		break ;
+ 8000504:	e028      	b.n	8000558 <Slave_States+0xd0>
+	}
+
+	case I2C_EV_DATA_REQ:
+	{
+		//make sure that the slave is really in transmitter mode
+		if(I2Cx->SR2 & ( I2C_SR2_TRA))
+ 8000506:	687b      	ldr	r3, [r7, #4]
+ 8000508:	699b      	ldr	r3, [r3, #24]
+ 800050a:	f003 0304 	and.w	r3, r3, #4
+ 800050e:	2b00      	cmp	r3, #0
+ 8000510:	d01f      	beq.n	8000552 <Slave_States+0xca>
+		{
+			//the APP layer should send the data (MCAL_I2C_SlaveSendData ) in this state
+			Global_I2C_Config [index].P_Slave_Event_CallBack (I2C_EV_DATA_REQ) ;
+ 8000512:	7bfa      	ldrb	r2, [r7, #15]
+ 8000514:	4913      	ldr	r1, [pc, #76]	; (8000564 <Slave_States+0xdc>)
+ 8000516:	4613      	mov	r3, r2
+ 8000518:	00db      	lsls	r3, r3, #3
+ 800051a:	4413      	add	r3, r2
+ 800051c:	009b      	lsls	r3, r3, #2
+ 800051e:	440b      	add	r3, r1
+ 8000520:	3320      	adds	r3, #32
+ 8000522:	681b      	ldr	r3, [r3, #0]
+ 8000524:	2003      	movs	r0, #3
+ 8000526:	4798      	blx	r3
+		}
+
+		break ;
+ 8000528:	e013      	b.n	8000552 <Slave_States+0xca>
+	}
+	case I2C_EV_DATA_RCV:
+	{
+		//make sure that the slave is really in receiver mode
+		if(!(I2Cx->SR2 & ( I2C_SR2_TRA)))
+ 800052a:	687b      	ldr	r3, [r7, #4]
+ 800052c:	699b      	ldr	r3, [r3, #24]
+ 800052e:	f003 0304 	and.w	r3, r3, #4
+ 8000532:	2b00      	cmp	r3, #0
+ 8000534:	d10f      	bne.n	8000556 <Slave_States+0xce>
+		{
+			//the APP layer should read the data (MCAL_I2C_SlaveReceiveData ) in this state
+			Global_I2C_Config [index].P_Slave_Event_CallBack (I2C_EV_DATA_RCV) ;
+ 8000536:	7bfa      	ldrb	r2, [r7, #15]
+ 8000538:	490a      	ldr	r1, [pc, #40]	; (8000564 <Slave_States+0xdc>)
+ 800053a:	4613      	mov	r3, r2
+ 800053c:	00db      	lsls	r3, r3, #3
+ 800053e:	4413      	add	r3, r2
+ 8000540:	009b      	lsls	r3, r3, #2
+ 8000542:	440b      	add	r3, r1
+ 8000544:	3320      	adds	r3, #32
+ 8000546:	681b      	ldr	r3, [r3, #0]
+ 8000548:	2004      	movs	r0, #4
+ 800054a:	4798      	blx	r3
+		}
+
+		break ;
+ 800054c:	e003      	b.n	8000556 <Slave_States+0xce>
+		break ;
+ 800054e:	bf00      	nop
+ 8000550:	e002      	b.n	8000558 <Slave_States+0xd0>
+		break ;
+ 8000552:	bf00      	nop
+ 8000554:	e000      	b.n	8000558 <Slave_States+0xd0>
+		break ;
+ 8000556:	bf00      	nop
+	}
+	}
+
+}
+ 8000558:	bf00      	nop
+ 800055a:	3710      	adds	r7, #16
+ 800055c:	46bd      	mov	sp, r7
+ 800055e:	bd80      	pop	{r7, pc}
+ 8000560:	40005400 	.word	0x40005400
+ 8000564:	2000001c 	.word	0x2000001c
+
+08000568 <I2C2_ER_IRQHandler>:
+
+void I2C2_ER_IRQHandler (void)
+{
+ 8000568:	b480      	push	{r7}
+ 800056a:	af00      	add	r7, sp, #0
+
+}
+ 800056c:	bf00      	nop
+ 800056e:	46bd      	mov	sp, r7
+ 8000570:	bc80      	pop	{r7}
+ 8000572:	4770      	bx	lr
+
+08000574 <I2C2_EV_IRQHandler>:
+
+void I2C2_EV_IRQHandler (void)
+{
+ 8000574:	b480      	push	{r7}
+ 8000576:	af00      	add	r7, sp, #0
+
+}
+ 8000578:	bf00      	nop
+ 800057a:	46bd      	mov	sp, r7
+ 800057c:	bc80      	pop	{r7}
+ 800057e:	4770      	bx	lr
+
+08000580 <SPI1_IRQHandler>:
+
+/* ================= IRQ Function Definitions ===================== */
+/* ================================================================ */
+
+void SPI1_IRQHandler(void)
+{
+ 8000580:	b580      	push	{r7, lr}
+ 8000582:	af00      	add	r7, sp, #0
+	SPI_INT_CALLBACK [0]();
+ 8000584:	4b02      	ldr	r3, [pc, #8]	; (8000590 <SPI1_IRQHandler+0x10>)
+ 8000586:	681b      	ldr	r3, [r3, #0]
+ 8000588:	4798      	blx	r3
+}
+ 800058a:	bf00      	nop
+ 800058c:	bd80      	pop	{r7, pc}
+ 800058e:	bf00      	nop
+ 8000590:	20000064 	.word	0x20000064
+
+08000594 <SPI2_IRQHandler>:
+
+
+void SPI2_IRQHandler(void)
+{
+ 8000594:	b580      	push	{r7, lr}
+ 8000596:	af00      	add	r7, sp, #0
+	SPI_INT_CALLBACK [1]();
+ 8000598:	4b02      	ldr	r3, [pc, #8]	; (80005a4 <SPI2_IRQHandler+0x10>)
+ 800059a:	685b      	ldr	r3, [r3, #4]
+ 800059c:	4798      	blx	r3
+}
+ 800059e:	bf00      	nop
+ 80005a0:	bd80      	pop	{r7, pc}
+ 80005a2:	bf00      	nop
+ 80005a4:	20000064 	.word	0x20000064
+
+080005a8 <USART1_IRQHandler>:
+}
+
+
+
+void USART1_IRQHandler (void)
+{
+ 80005a8:	b580      	push	{r7, lr}
+ 80005aa:	af00      	add	r7, sp, #0
+	USART_INT_CALLBACK [0]();
+ 80005ac:	4b02      	ldr	r3, [pc, #8]	; (80005b8 <USART1_IRQHandler+0x10>)
+ 80005ae:	681b      	ldr	r3, [r3, #0]
+ 80005b0:	4798      	blx	r3
+}
+ 80005b2:	bf00      	nop
+ 80005b4:	bd80      	pop	{r7, pc}
+ 80005b6:	bf00      	nop
+ 80005b8:	2000006c 	.word	0x2000006c
+
+080005bc <USART2_IRQHandler>:
+
+void USART2_IRQHandler (void)
+{
+ 80005bc:	b580      	push	{r7, lr}
+ 80005be:	af00      	add	r7, sp, #0
+	USART_INT_CALLBACK [1]();
+ 80005c0:	4b02      	ldr	r3, [pc, #8]	; (80005cc <USART2_IRQHandler+0x10>)
+ 80005c2:	685b      	ldr	r3, [r3, #4]
+ 80005c4:	4798      	blx	r3
+}
+ 80005c6:	bf00      	nop
+ 80005c8:	bd80      	pop	{r7, pc}
+ 80005ca:	bf00      	nop
+ 80005cc:	2000006c 	.word	0x2000006c
+
+080005d0 <USART3_IRQHandler>:
+
+void USART3_IRQHandler (void)
+{
+ 80005d0:	b580      	push	{r7, lr}
+ 80005d2:	af00      	add	r7, sp, #0
+	USART_INT_CALLBACK [2]();
+ 80005d4:	4b02      	ldr	r3, [pc, #8]	; (80005e0 <USART3_IRQHandler+0x10>)
+ 80005d6:	689b      	ldr	r3, [r3, #8]
+ 80005d8:	4798      	blx	r3
+}
+ 80005da:	bf00      	nop
+ 80005dc:	bd80      	pop	{r7, pc}
+ 80005de:	bf00      	nop
+ 80005e0:	2000006c 	.word	0x2000006c
+
+080005e4 <HardFault_Handler>:
+ *  Created on: Apr 26, 2024
+ *      Author: Omar Zakaria
+ */
+#include "CortexMX_OS_porting.h"
+
+void HardFault_Handler(void) {
+ 80005e4:	b480      	push	{r7}
+ 80005e6:	af00      	add	r7, sp, #0
+	while (1)
+ 80005e8:	e7fe      	b.n	80005e8 <HardFault_Handler+0x4>
+
+080005ea <MemManage_Handler>:
+		;
+}
+void MemManage_Handler(void) {
+ 80005ea:	b480      	push	{r7}
+ 80005ec:	af00      	add	r7, sp, #0
+	while (1)
+ 80005ee:	e7fe      	b.n	80005ee <MemManage_Handler+0x4>
+
+080005f0 <BusFault_Handler>:
+		;
+}
+void BusFault_Handler(void) {
+ 80005f0:	b480      	push	{r7}
+ 80005f2:	af00      	add	r7, sp, #0
+	while (1)
+ 80005f4:	e7fe      	b.n	80005f4 <BusFault_Handler+0x4>
+
+080005f6 <UsageFault_Handler>:
+		;
+}
+void UsageFault_Handler(void) {
+ 80005f6:	b480      	push	{r7}
+ 80005f8:	af00      	add	r7, sp, #0
+	while (1)
+ 80005fa:	e7fe      	b.n	80005fa <UsageFault_Handler+0x4>
+
+080005fc <SVC_Handler>:
+	/*
+	 * ---> We will make this SVC_Hnadler as assembly ==> No caller stack pushing
+	 * 1- Know we were in which stack MSP/PSP -> r0
+	 * 2- call a c-function that take a pointer as arg (r0)
+	 * */
+	__asm("TST LR,#0x4 \n\t"
+ 80005fc:	f01e 0f04 	tst.w	lr, #4
+ 8000600:	bf0c      	ite	eq
+ 8000602:	f3ef 8008 	mrseq	r0, MSP
+ 8000606:	f3ef 8009 	mrsne	r0, PSP
+ 800060a:	f000 b823 	b.w	8000654 <OS_SVC>
+			"ITE EQ \n\t"
+			"MRSEQ r0,MSP \n\t"
+			"MRSNE r0,PSP \n\t"
+			"B OS_SVC");
+
+}
+ 800060e:	bf00      	nop
+
+08000610 <FIFO_init>:
+
+
+
+#include"MYRTOS_FIFO.h"
+/* *********************************** */
+Buffer_status FIFO_init (FIFO_Buf_t* fifo,element_type* buff , unsigned int length){
+ 8000610:	b480      	push	{r7}
+ 8000612:	b085      	sub	sp, #20
+ 8000614:	af00      	add	r7, sp, #0
+ 8000616:	60f8      	str	r0, [r7, #12]
+ 8000618:	60b9      	str	r1, [r7, #8]
+ 800061a:	607a      	str	r2, [r7, #4]
+
+	if(!buff )
+ 800061c:	68bb      	ldr	r3, [r7, #8]
+ 800061e:	2b00      	cmp	r3, #0
+ 8000620:	d101      	bne.n	8000626 <FIFO_init+0x16>
+		return FIFO_NULL;
+ 8000622:	2303      	movs	r3, #3
+ 8000624:	e011      	b.n	800064a <FIFO_init+0x3a>
+
+	fifo->base = buff ;
+ 8000626:	68fb      	ldr	r3, [r7, #12]
+ 8000628:	68ba      	ldr	r2, [r7, #8]
+ 800062a:	60da      	str	r2, [r3, #12]
+	fifo->head = fifo->base ;
+ 800062c:	68fb      	ldr	r3, [r7, #12]
+ 800062e:	68da      	ldr	r2, [r3, #12]
+ 8000630:	68fb      	ldr	r3, [r7, #12]
+ 8000632:	605a      	str	r2, [r3, #4]
+	fifo->tail = fifo->base ;
+ 8000634:	68fb      	ldr	r3, [r7, #12]
+ 8000636:	68da      	ldr	r2, [r3, #12]
+ 8000638:	68fb      	ldr	r3, [r7, #12]
+ 800063a:	609a      	str	r2, [r3, #8]
+	fifo->length = length;
+ 800063c:	68fb      	ldr	r3, [r7, #12]
+ 800063e:	687a      	ldr	r2, [r7, #4]
+ 8000640:	611a      	str	r2, [r3, #16]
+	fifo->counter=0;
+ 8000642:	68fb      	ldr	r3, [r7, #12]
+ 8000644:	2200      	movs	r2, #0
+ 8000646:	601a      	str	r2, [r3, #0]
+
+	return FIFO_NO_ERROR;
+ 8000648:	2300      	movs	r3, #0
+
+}
+ 800064a:	4618      	mov	r0, r3
+ 800064c:	3714      	adds	r7, #20
+ 800064e:	46bd      	mov	sp, r7
+ 8000650:	bc80      	pop	{r7}
+ 8000652:	4770      	bx	lr
+
+08000654 <OS_SVC>:
+
+FIFO_Buf_t Ready_QUEUE;
+TASK* Ready_QUEUE_FIFO[100] ;
+TASK MYRTOS_idleTask ;
+
+void OS_SVC(int *Stack_Frame) {
+ 8000654:	b480      	push	{r7}
+ 8000656:	b085      	sub	sp, #20
+ 8000658:	af00      	add	r7, sp, #0
+ 800065a:	6078      	str	r0, [r7, #4]
+	/*args = r0 -> MSP or PSP*/
+	//OS_SVC Stack end -> r0
+	//OS_SVC Stack : old r0-r1-r2-r3-r12-lr-pc-xpsr
+	unsigned char SVC_Number;
+	unsigned int val1, val2;
+	SVC_Number = *((unsigned char*) ((unsigned char*) Stack_Frame[6] - 2));
+ 800065c:	687b      	ldr	r3, [r7, #4]
+ 800065e:	3318      	adds	r3, #24
+ 8000660:	681b      	ldr	r3, [r3, #0]
+ 8000662:	3b02      	subs	r3, #2
+ 8000664:	781b      	ldrb	r3, [r3, #0]
+ 8000666:	73fb      	strb	r3, [r7, #15]
+
+	switch (SVC_Number) {
+ 8000668:	7bfb      	ldrb	r3, [r7, #15]
+ 800066a:	2b03      	cmp	r3, #3
+ 800066c:	d80b      	bhi.n	8000686 <OS_SVC+0x32>
+ 800066e:	a201      	add	r2, pc, #4	; (adr r2, 8000674 <OS_SVC+0x20>)
+ 8000670:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 8000674:	08000685 	.word	0x08000685
+ 8000678:	08000685 	.word	0x08000685
+ 800067c:	08000685 	.word	0x08000685
+ 8000680:	08000685 	.word	0x08000685
+	case 0:
+
+		break;
+ 8000684:	bf00      	nop
+		break;
+	case 3:
+
+		break;
+	}
+}
+ 8000686:	bf00      	nop
+ 8000688:	3714      	adds	r7, #20
+ 800068a:	46bd      	mov	sp, r7
+ 800068c:	bc80      	pop	{r7}
+ 800068e:	4770      	bx	lr
+
+08000690 <PendSV_Handler>:
+void PendSV_Handler() {
+ 8000690:	b480      	push	{r7}
+ 8000692:	af00      	add	r7, sp, #0
+
+}
+ 8000694:	bf00      	nop
+ 8000696:	46bd      	mov	sp, r7
+ 8000698:	bc80      	pop	{r7}
+ 800069a:	4770      	bx	lr
+
+0800069c <MYRTOS_Handle_idleTask>:
+		break;
+	}
+//	return result;
+}
+
+void MYRTOS_Handle_idleTask (){
+ 800069c:	b480      	push	{r7}
+ 800069e:	af00      	add	r7, sp, #0
+	while(1)
+	{
+		__asm("NOP");
+ 80006a0:	bf00      	nop
+ 80006a2:	e7fd      	b.n	80006a0 <MYRTOS_Handle_idleTask+0x4>
+
+080006a4 <RTOS_Create_MainStack>:
+
+
+}
+
+
+RTOS_Create_MainStack() {
+ 80006a4:	b480      	push	{r7}
+ 80006a6:	af00      	add	r7, sp, #0
+	OS_Control._S_MSP = &_estack;
+ 80006a8:	4a0b      	ldr	r2, [pc, #44]	; (80006d8 <RTOS_Create_MainStack+0x34>)
+ 80006aa:	4b0c      	ldr	r3, [pc, #48]	; (80006dc <RTOS_Create_MainStack+0x38>)
+ 80006ac:	f8c3 2190 	str.w	r2, [r3, #400]	; 0x190
+	OS_Control._E_MSP = OS_Control._S_MSP - MainStackSize;
+ 80006b0:	4b0a      	ldr	r3, [pc, #40]	; (80006dc <RTOS_Create_MainStack+0x38>)
+ 80006b2:	f8d3 3190 	ldr.w	r3, [r3, #400]	; 0x190
+ 80006b6:	f5a3 6340 	sub.w	r3, r3, #3072	; 0xc00
+ 80006ba:	4a08      	ldr	r2, [pc, #32]	; (80006dc <RTOS_Create_MainStack+0x38>)
+ 80006bc:	f8c2 3194 	str.w	r3, [r2, #404]	; 0x194
+
+	OS_Control.PSP_Task_Locator = (OS_Control._E_MSP - 8);
+ 80006c0:	4b06      	ldr	r3, [pc, #24]	; (80006dc <RTOS_Create_MainStack+0x38>)
+ 80006c2:	f8d3 3194 	ldr.w	r3, [r3, #404]	; 0x194
+ 80006c6:	3b08      	subs	r3, #8
+ 80006c8:	4a04      	ldr	r2, [pc, #16]	; (80006dc <RTOS_Create_MainStack+0x38>)
+ 80006ca:	f8c2 3198 	str.w	r3, [r2, #408]	; 0x198
+}
+ 80006ce:	bf00      	nop
+ 80006d0:	4618      	mov	r0, r3
+ 80006d2:	46bd      	mov	sp, r7
+ 80006d4:	bc80      	pop	{r7}
+ 80006d6:	4770      	bx	lr
+ 80006d8:	20005000 	.word	0x20005000
+ 80006dc:	200000b4 	.word	0x200000b4
+
+080006e0 <MYRTOS_Init>:
+
+MYRTOS_ErrorID MYRTOS_Init() {
+ 80006e0:	b580      	push	{r7, lr}
+ 80006e2:	b082      	sub	sp, #8
+ 80006e4:	af00      	add	r7, sp, #0
+	MYRTOS_ErrorID error = NoError;
+ 80006e6:	2300      	movs	r3, #0
+ 80006e8:	71fb      	strb	r3, [r7, #7]
+	OS_Control.OSMode = Os_Suspended;
+ 80006ea:	4b16      	ldr	r3, [pc, #88]	; (8000744 <MYRTOS_Init+0x64>)
+ 80006ec:	2200      	movs	r2, #0
+ 80006ee:	f883 21a8 	strb.w	r2, [r3, #424]	; 0x1a8
+	RTOS_Create_MainStack();
+ 80006f2:	f7ff ffd7 	bl	80006a4 <RTOS_Create_MainStack>
+	if (FIFO_init(&Ready_QUEUE, Ready_QUEUE_FIFO, 100)!= FIFO_NO_ERROR){
+ 80006f6:	2264      	movs	r2, #100	; 0x64
+ 80006f8:	4913      	ldr	r1, [pc, #76]	; (8000748 <MYRTOS_Init+0x68>)
+ 80006fa:	4814      	ldr	r0, [pc, #80]	; (800074c <MYRTOS_Init+0x6c>)
+ 80006fc:	f7ff ff88 	bl	8000610 <FIFO_init>
+ 8000700:	4603      	mov	r3, r0
+ 8000702:	2b00      	cmp	r3, #0
+ 8000704:	d002      	beq.n	800070c <MYRTOS_Init+0x2c>
+		error += Ready_Queue_init_error;
+ 8000706:	79fb      	ldrb	r3, [r7, #7]
+ 8000708:	3301      	adds	r3, #1
+ 800070a:	71fb      	strb	r3, [r7, #7]
+	}
+	//Configure IDLE TASK
+	strcpy (MYRTOS_idleTask.TaskName, "idleTask");
+ 800070c:	4b10      	ldr	r3, [pc, #64]	; (8000750 <MYRTOS_Init+0x70>)
+ 800070e:	4a11      	ldr	r2, [pc, #68]	; (8000754 <MYRTOS_Init+0x74>)
+ 8000710:	ca07      	ldmia	r2, {r0, r1, r2}
+ 8000712:	c303      	stmia	r3!, {r0, r1}
+ 8000714:	701a      	strb	r2, [r3, #0]
+	MYRTOS_idleTask.Priority = 255 ;
+ 8000716:	4b10      	ldr	r3, [pc, #64]	; (8000758 <MYRTOS_Init+0x78>)
+ 8000718:	22ff      	movs	r2, #255	; 0xff
+ 800071a:	711a      	strb	r2, [r3, #4]
+	MYRTOS_idleTask.p_TaskEntry = MYRTOS_Handle_idleTask ;
+ 800071c:	4b0e      	ldr	r3, [pc, #56]	; (8000758 <MYRTOS_Init+0x78>)
+ 800071e:	4a0f      	ldr	r2, [pc, #60]	; (800075c <MYRTOS_Init+0x7c>)
+ 8000720:	609a      	str	r2, [r3, #8]
+	MYRTOS_idleTask.Stack_Size = 300 ;
+ 8000722:	4b0d      	ldr	r3, [pc, #52]	; (8000758 <MYRTOS_Init+0x78>)
+ 8000724:	f44f 7296 	mov.w	r2, #300	; 0x12c
+ 8000728:	601a      	str	r2, [r3, #0]
+
+	error += MYRTOS_CreateTask(&MYRTOS_idleTask);
+ 800072a:	480b      	ldr	r0, [pc, #44]	; (8000758 <MYRTOS_Init+0x78>)
+ 800072c:	f000 f818 	bl	8000760 <MYRTOS_CreateTask>
+ 8000730:	4603      	mov	r3, r0
+ 8000732:	461a      	mov	r2, r3
+ 8000734:	79fb      	ldrb	r3, [r7, #7]
+ 8000736:	4413      	add	r3, r2
+ 8000738:	71fb      	strb	r3, [r7, #7]
+
+	return error ;
+ 800073a:	79fb      	ldrb	r3, [r7, #7]
+}
+ 800073c:	4618      	mov	r0, r3
+ 800073e:	3708      	adds	r7, #8
+ 8000740:	46bd      	mov	sp, r7
+ 8000742:	bd80      	pop	{r7, pc}
+ 8000744:	200000b4 	.word	0x200000b4
+ 8000748:	200002b8 	.word	0x200002b8
+ 800074c:	20000260 	.word	0x20000260
+ 8000750:	20000290 	.word	0x20000290
+ 8000754:	08000960 	.word	0x08000960
+ 8000758:	20000274 	.word	0x20000274
+ 800075c:	0800069d 	.word	0x0800069d
+
+08000760 <MYRTOS_CreateTask>:
+
+MYRTOS_ErrorID MYRTOS_CreateTask(TASK* Tref)
+{
+ 8000760:	b480      	push	{r7}
+ 8000762:	b085      	sub	sp, #20
+ 8000764:	af00      	add	r7, sp, #0
+ 8000766:	6078      	str	r0, [r7, #4]
+	MYRTOS_ErrorID error = NoError ;
+ 8000768:	2300      	movs	r3, #0
+ 800076a:	73fb      	strb	r3, [r7, #15]
+
+	//Create Its OWN PSP stack
+	//Check task stack size exceeded the PSP stack
+	Tref->_S_PSP_Task = OS_Control.PSP_Task_Locator;
+ 800076c:	4b08      	ldr	r3, [pc, #32]	; (8000790 <MYRTOS_CreateTask+0x30>)
+ 800076e:	f8d3 2198 	ldr.w	r2, [r3, #408]	; 0x198
+ 8000772:	687b      	ldr	r3, [r7, #4]
+ 8000774:	611a      	str	r2, [r3, #16]
+	Tref->_E_PSP_Task = Tref->_S_PSP_Task - Tref->Stack_Size ;
+ 8000776:	687b      	ldr	r3, [r7, #4]
+ 8000778:	691a      	ldr	r2, [r3, #16]
+ 800077a:	687b      	ldr	r3, [r7, #4]
+ 800077c:	681b      	ldr	r3, [r3, #0]
+ 800077e:	1ad2      	subs	r2, r2, r3
+ 8000780:	687b      	ldr	r3, [r7, #4]
+ 8000782:	615a      	str	r2, [r3, #20]
+	//	- _eheap		-
+	//	-				-
+	//
+	if(Tref->_E_PSP_Task < (unsigned int)(& _eheab));
+	{
+		return Task_exceeded_StackSize ;
+ 8000784:	2302      	movs	r3, #2
+
+
+
+	return error ;
+
+}
+ 8000786:	4618      	mov	r0, r3
+ 8000788:	3714      	adds	r7, #20
+ 800078a:	46bd      	mov	sp, r7
+ 800078c:	bc80      	pop	{r7}
+ 800078e:	4770      	bx	lr
+ 8000790:	200000b4 	.word	0x200000b4
+
+08000794 <task1>:
+		for(j=0 ; j<255 ; j++);
+}
+
+
+void task1()
+{
+ 8000794:	b480      	push	{r7}
+ 8000796:	af00      	add	r7, sp, #0
+
+}
+ 8000798:	bf00      	nop
+ 800079a:	46bd      	mov	sp, r7
+ 800079c:	bc80      	pop	{r7}
+ 800079e:	4770      	bx	lr
+
+080007a0 <task2>:
+
+void task2()
+{
+ 80007a0:	b480      	push	{r7}
+ 80007a2:	af00      	add	r7, sp, #0
+
+}
+ 80007a4:	bf00      	nop
+ 80007a6:	46bd      	mov	sp, r7
+ 80007a8:	bc80      	pop	{r7}
+ 80007aa:	4770      	bx	lr
+
+080007ac <task3>:
+
+void task3()
+{
+ 80007ac:	b480      	push	{r7}
+ 80007ae:	af00      	add	r7, sp, #0
+
+}
+ 80007b0:	bf00      	nop
+ 80007b2:	46bd      	mov	sp, r7
+ 80007b4:	bc80      	pop	{r7}
+ 80007b6:	4770      	bx	lr
+
+080007b8 <main>:
+
+
+TASK Task1,Task2,Task3;
+
+int main()
+{
+ 80007b8:	b580      	push	{r7, lr}
+ 80007ba:	b082      	sub	sp, #8
+ 80007bc:	af00      	add	r7, sp, #0
+	MYRTOS_ErrorID error;
+	if (MYRTOS_Init() != NoError)
+ 80007be:	f7ff ff8f 	bl	80006e0 <MYRTOS_Init>
+ 80007c2:	4603      	mov	r3, r0
+ 80007c4:	2b00      	cmp	r3, #0
+ 80007c6:	d000      	beq.n	80007ca <main+0x12>
+		while (1);
+ 80007c8:	e7fe      	b.n	80007c8 <main+0x10>
+
+	Task1.Stack_Size = 1024 ;
+ 80007ca:	4b2c      	ldr	r3, [pc, #176]	; (800087c <main+0xc4>)
+ 80007cc:	f44f 6280 	mov.w	r2, #1024	; 0x400
+ 80007d0:	601a      	str	r2, [r3, #0]
+	Task1.p_TaskEntry =task1;
+ 80007d2:	4b2a      	ldr	r3, [pc, #168]	; (800087c <main+0xc4>)
+ 80007d4:	4a2a      	ldr	r2, [pc, #168]	; (8000880 <main+0xc8>)
+ 80007d6:	609a      	str	r2, [r3, #8]
+	Task1.Priority= 3 ;
+ 80007d8:	4b28      	ldr	r3, [pc, #160]	; (800087c <main+0xc4>)
+ 80007da:	2203      	movs	r2, #3
+ 80007dc:	711a      	strb	r2, [r3, #4]
+	strcpy (Task1.TaskName, "task_1");
+ 80007de:	4b29      	ldr	r3, [pc, #164]	; (8000884 <main+0xcc>)
+ 80007e0:	4a29      	ldr	r2, [pc, #164]	; (8000888 <main+0xd0>)
+ 80007e2:	e892 0003 	ldmia.w	r2, {r0, r1}
+ 80007e6:	6018      	str	r0, [r3, #0]
+ 80007e8:	3304      	adds	r3, #4
+ 80007ea:	8019      	strh	r1, [r3, #0]
+ 80007ec:	3302      	adds	r3, #2
+ 80007ee:	0c0a      	lsrs	r2, r1, #16
+ 80007f0:	701a      	strb	r2, [r3, #0]
+
+	Task2.Stack_Size = 1024 ;
+ 80007f2:	4b26      	ldr	r3, [pc, #152]	; (800088c <main+0xd4>)
+ 80007f4:	f44f 6280 	mov.w	r2, #1024	; 0x400
+ 80007f8:	601a      	str	r2, [r3, #0]
+	Task2.p_TaskEntry =task2;
+ 80007fa:	4b24      	ldr	r3, [pc, #144]	; (800088c <main+0xd4>)
+ 80007fc:	4a24      	ldr	r2, [pc, #144]	; (8000890 <main+0xd8>)
+ 80007fe:	609a      	str	r2, [r3, #8]
+	Task2.Priority= 3 ;
+ 8000800:	4b22      	ldr	r3, [pc, #136]	; (800088c <main+0xd4>)
+ 8000802:	2203      	movs	r2, #3
+ 8000804:	711a      	strb	r2, [r3, #4]
+	strcpy (Task2.TaskName, "task_2");
+ 8000806:	4b23      	ldr	r3, [pc, #140]	; (8000894 <main+0xdc>)
+ 8000808:	4a23      	ldr	r2, [pc, #140]	; (8000898 <main+0xe0>)
+ 800080a:	e892 0003 	ldmia.w	r2, {r0, r1}
+ 800080e:	6018      	str	r0, [r3, #0]
+ 8000810:	3304      	adds	r3, #4
+ 8000812:	8019      	strh	r1, [r3, #0]
+ 8000814:	3302      	adds	r3, #2
+ 8000816:	0c0a      	lsrs	r2, r1, #16
+ 8000818:	701a      	strb	r2, [r3, #0]
+
+	Task3.Stack_Size = 1024 ;
+ 800081a:	4b20      	ldr	r3, [pc, #128]	; (800089c <main+0xe4>)
+ 800081c:	f44f 6280 	mov.w	r2, #1024	; 0x400
+ 8000820:	601a      	str	r2, [r3, #0]
+	Task3.p_TaskEntry =task3;
+ 8000822:	4b1e      	ldr	r3, [pc, #120]	; (800089c <main+0xe4>)
+ 8000824:	4a1e      	ldr	r2, [pc, #120]	; (80008a0 <main+0xe8>)
+ 8000826:	609a      	str	r2, [r3, #8]
+	Task3.Priority= 3 ;
+ 8000828:	4b1c      	ldr	r3, [pc, #112]	; (800089c <main+0xe4>)
+ 800082a:	2203      	movs	r2, #3
+ 800082c:	711a      	strb	r2, [r3, #4]
+	strcpy (Task3.TaskName, "task_3");
+ 800082e:	4b1d      	ldr	r3, [pc, #116]	; (80008a4 <main+0xec>)
+ 8000830:	4a1d      	ldr	r2, [pc, #116]	; (80008a8 <main+0xf0>)
+ 8000832:	e892 0003 	ldmia.w	r2, {r0, r1}
+ 8000836:	6018      	str	r0, [r3, #0]
+ 8000838:	3304      	adds	r3, #4
+ 800083a:	8019      	strh	r1, [r3, #0]
+ 800083c:	3302      	adds	r3, #2
+ 800083e:	0c0a      	lsrs	r2, r1, #16
+ 8000840:	701a      	strb	r2, [r3, #0]
+
+	error+=MYRTOS_CreateTask(&Task1);
+ 8000842:	480e      	ldr	r0, [pc, #56]	; (800087c <main+0xc4>)
+ 8000844:	f7ff ff8c 	bl	8000760 <MYRTOS_CreateTask>
+ 8000848:	4603      	mov	r3, r0
+ 800084a:	461a      	mov	r2, r3
+ 800084c:	79fb      	ldrb	r3, [r7, #7]
+ 800084e:	4413      	add	r3, r2
+ 8000850:	71fb      	strb	r3, [r7, #7]
+	error+=MYRTOS_CreateTask(&Task2);
+ 8000852:	480e      	ldr	r0, [pc, #56]	; (800088c <main+0xd4>)
+ 8000854:	f7ff ff84 	bl	8000760 <MYRTOS_CreateTask>
+ 8000858:	4603      	mov	r3, r0
+ 800085a:	461a      	mov	r2, r3
+ 800085c:	79fb      	ldrb	r3, [r7, #7]
+ 800085e:	4413      	add	r3, r2
+ 8000860:	71fb      	strb	r3, [r7, #7]
+	error+=MYRTOS_CreateTask(&Task3);
+ 8000862:	480e      	ldr	r0, [pc, #56]	; (800089c <main+0xe4>)
+ 8000864:	f7ff ff7c 	bl	8000760 <MYRTOS_CreateTask>
+ 8000868:	4603      	mov	r3, r0
+ 800086a:	461a      	mov	r2, r3
+ 800086c:	79fb      	ldrb	r3, [r7, #7]
+ 800086e:	4413      	add	r3, r2
+ 8000870:	71fb      	strb	r3, [r7, #7]
+
+	return 0 ;
+ 8000872:	2300      	movs	r3, #0
+
+
+}
+ 8000874:	4618      	mov	r0, r3
+ 8000876:	3708      	adds	r7, #8
+ 8000878:	46bd      	mov	sp, r7
+ 800087a:	bd80      	pop	{r7, pc}
+ 800087c:	20000448 	.word	0x20000448
+ 8000880:	08000795 	.word	0x08000795
+ 8000884:	20000464 	.word	0x20000464
+ 8000888:	0800096c 	.word	0x0800096c
+ 800088c:	200004d0 	.word	0x200004d0
+ 8000890:	080007a1 	.word	0x080007a1
+ 8000894:	200004ec 	.word	0x200004ec
+ 8000898:	08000974 	.word	0x08000974
+ 800089c:	2000048c 	.word	0x2000048c
+ 80008a0:	080007ad 	.word	0x080007ad
+ 80008a4:	200004a8 	.word	0x200004a8
+ 80008a8:	0800097c 	.word	0x0800097c
+
+080008ac <Reset_Handler>:
+
+  .section .text.Reset_Handler
+  .weak Reset_Handler
+  .type Reset_Handler, %function
+Reset_Handler:
+  ldr   r0, =_estack
+ 80008ac:	480d      	ldr	r0, [pc, #52]	; (80008e4 <LoopForever+0x2>)
+  mov   sp, r0          /* set stack pointer */
+ 80008ae:	4685      	mov	sp, r0
+/* Call the clock system intitialization function.*/
+  bl  SystemInit
+ 80008b0:	f3af 8000 	nop.w
+
+/* Copy the data segment initializers from flash to SRAM */
+  ldr r0, =_sdata
+ 80008b4:	480c      	ldr	r0, [pc, #48]	; (80008e8 <LoopForever+0x6>)
+  ldr r1, =_edata
+ 80008b6:	490d      	ldr	r1, [pc, #52]	; (80008ec <LoopForever+0xa>)
+  ldr r2, =_sidata
+ 80008b8:	4a0d      	ldr	r2, [pc, #52]	; (80008f0 <LoopForever+0xe>)
+  movs r3, #0
+ 80008ba:	2300      	movs	r3, #0
+  b LoopCopyDataInit
+ 80008bc:	e002      	b.n	80008c4 <LoopCopyDataInit>
+
+080008be <CopyDataInit>:
+
+CopyDataInit:
+  ldr r4, [r2, r3]
+ 80008be:	58d4      	ldr	r4, [r2, r3]
+  str r4, [r0, r3]
+ 80008c0:	50c4      	str	r4, [r0, r3]
+  adds r3, r3, #4
+ 80008c2:	3304      	adds	r3, #4
+
+080008c4 <LoopCopyDataInit>:
+
+LoopCopyDataInit:
+  adds r4, r0, r3
+ 80008c4:	18c4      	adds	r4, r0, r3
+  cmp r4, r1
+ 80008c6:	428c      	cmp	r4, r1
+  bcc CopyDataInit
+ 80008c8:	d3f9      	bcc.n	80008be <CopyDataInit>
+
+/* Zero fill the bss segment. */
+  ldr r2, =_sbss
+ 80008ca:	4a0a      	ldr	r2, [pc, #40]	; (80008f4 <LoopForever+0x12>)
+  ldr r4, =_ebss
+ 80008cc:	4c0a      	ldr	r4, [pc, #40]	; (80008f8 <LoopForever+0x16>)
+  movs r3, #0
+ 80008ce:	2300      	movs	r3, #0
+  b LoopFillZerobss
+ 80008d0:	e001      	b.n	80008d6 <LoopFillZerobss>
+
+080008d2 <FillZerobss>:
+
+FillZerobss:
+  str  r3, [r2]
+ 80008d2:	6013      	str	r3, [r2, #0]
+  adds r2, r2, #4
+ 80008d4:	3204      	adds	r2, #4
+
+080008d6 <LoopFillZerobss>:
+
+LoopFillZerobss:
+  cmp r2, r4
+ 80008d6:	42a2      	cmp	r2, r4
+  bcc FillZerobss
+ 80008d8:	d3fb      	bcc.n	80008d2 <FillZerobss>
+
+/* Call static constructors */
+  bl __libc_init_array
+ 80008da:	f000 f811 	bl	8000900 <__libc_init_array>
+/* Call the application's entry point.*/
+  bl main
+ 80008de:	f7ff ff6b 	bl	80007b8 <main>
+
+080008e2 <LoopForever>:
+
+LoopForever:
+    b LoopForever
+ 80008e2:	e7fe      	b.n	80008e2 <LoopForever>
+  ldr   r0, =_estack
+ 80008e4:	20005000 	.word	0x20005000
+  ldr r0, =_sdata
+ 80008e8:	20000000 	.word	0x20000000
+  ldr r1, =_edata
+ 80008ec:	20000000 	.word	0x20000000
+  ldr r2, =_sidata
+ 80008f0:	0800098c 	.word	0x0800098c
+  ldr r2, =_sbss
+ 80008f4:	20000000 	.word	0x20000000
+  ldr r4, =_ebss
+ 80008f8:	20000514 	.word	0x20000514
+
+080008fc <ADC1_2_IRQHandler>:
+ * @retval : None
+*/
+  .section .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+  b Infinite_Loop
+ 80008fc:	e7fe      	b.n	80008fc <ADC1_2_IRQHandler>
+	...
+
+08000900 <__libc_init_array>:
+ 8000900:	b570      	push	{r4, r5, r6, lr}
+ 8000902:	2500      	movs	r5, #0
+ 8000904:	4e0c      	ldr	r6, [pc, #48]	; (8000938 <__libc_init_array+0x38>)
+ 8000906:	4c0d      	ldr	r4, [pc, #52]	; (800093c <__libc_init_array+0x3c>)
+ 8000908:	1ba4      	subs	r4, r4, r6
+ 800090a:	10a4      	asrs	r4, r4, #2
+ 800090c:	42a5      	cmp	r5, r4
+ 800090e:	d109      	bne.n	8000924 <__libc_init_array+0x24>
+ 8000910:	f000 f81a 	bl	8000948 <_init>
+ 8000914:	2500      	movs	r5, #0
+ 8000916:	4e0a      	ldr	r6, [pc, #40]	; (8000940 <__libc_init_array+0x40>)
+ 8000918:	4c0a      	ldr	r4, [pc, #40]	; (8000944 <__libc_init_array+0x44>)
+ 800091a:	1ba4      	subs	r4, r4, r6
+ 800091c:	10a4      	asrs	r4, r4, #2
+ 800091e:	42a5      	cmp	r5, r4
+ 8000920:	d105      	bne.n	800092e <__libc_init_array+0x2e>
+ 8000922:	bd70      	pop	{r4, r5, r6, pc}
+ 8000924:	f856 3025 	ldr.w	r3, [r6, r5, lsl #2]
+ 8000928:	4798      	blx	r3
+ 800092a:	3501      	adds	r5, #1
+ 800092c:	e7ee      	b.n	800090c <__libc_init_array+0xc>
+ 800092e:	f856 3025 	ldr.w	r3, [r6, r5, lsl #2]
+ 8000932:	4798      	blx	r3
+ 8000934:	3501      	adds	r5, #1
+ 8000936:	e7f2      	b.n	800091e <__libc_init_array+0x1e>
+ 8000938:	08000984 	.word	0x08000984
+ 800093c:	08000984 	.word	0x08000984
+ 8000940:	08000984 	.word	0x08000984
+ 8000944:	08000988 	.word	0x08000988
+
+08000948 <_init>:
+ 8000948:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 800094a:	bf00      	nop
+ 800094c:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 800094e:	bc08      	pop	{r3}
+ 8000950:	469e      	mov	lr, r3
+ 8000952:	4770      	bx	lr
+
+08000954 <_fini>:
+ 8000954:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8000956:	bf00      	nop
+ 8000958:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 800095a:	bc08      	pop	{r3}
+ 800095c:	469e      	mov	lr, r3
+ 800095e:	4770      	bx	lr

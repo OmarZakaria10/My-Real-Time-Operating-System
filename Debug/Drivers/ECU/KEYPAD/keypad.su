@@ -1,0 +1,3 @@
+keypad.c:13:16:keypad_initialize	24	static
+keypad.c:30:6:keypad_get_value	32	static
+keypad.c:55:6:keypad_get_value_blocking	32	static

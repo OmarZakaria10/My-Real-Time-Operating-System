@@ -1,0 +1,2 @@
+ADC.c:12:6:MCAL_ADC_INIT	16	static
+ADC.c:57:10:MCAL_ADC_READ	40	static
