@@ -6,28 +6,27 @@
 
 
 
-void wait(uint32_t time)
-{
-	uint32_t i , j;
 
-	for( i=0 ; i<time ; i++)
-		for(j=0 ; j<255 ; j++);
-}
-
-
+int led1=0 ,led2=0 ,led3=0;
 void task1()
 {
-
+	while(1){
+led1 ^=1;
+	}
 }
 
 void task2()
 {
-
+	while(1){
+led2 ^=1;
+	}
 }
 
 void task3()
 {
-
+	while(1){
+led3 ^=1;
+	}
 }
 
 
@@ -35,6 +34,7 @@ TASK Task1,Task2,Task3;
 
 int main()
 {
+	HW_init();
 	MYRTOS_ErrorID error;
 	if (MYRTOS_Init() != NoError)
 		while (1);
@@ -57,6 +57,15 @@ int main()
 	error+=MYRTOS_CreateTask(&Task1);
 	error+=MYRTOS_CreateTask(&Task2);
 	error+=MYRTOS_CreateTask(&Task3);
+
+	MYRTOS_ActivateTask(&Task1);
+	MYRTOS_ActivateTask(&Task2);
+	MYRTOS_ActivateTask(&Task3);
+
+	MYRTOS_StartOS();
+	while(1){
+
+	}
 
 	return 0 ;
 

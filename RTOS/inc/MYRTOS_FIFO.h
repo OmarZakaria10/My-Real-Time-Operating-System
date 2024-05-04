@@ -12,8 +12,8 @@
 #include"stdint.h"
 #include "Scheduler.h"
 
-
 #define element_type TASK*
+
 typedef struct{
 	unsigned int counter;
 	element_type* head;
@@ -36,7 +36,7 @@ Buffer_status FIFO_init (FIFO_Buf_t* fifo,element_type* buff , unsigned int leng
 Buffer_status FIFO_enqueue (FIFO_Buf_t* fifo,element_type item);
 Buffer_status FIFO_dequeue (FIFO_Buf_t* fifo,element_type* item);
 Buffer_status FIFO_is_full (FIFO_Buf_t* fifo);
-void FIFO_print (FIFO_Buf_t* fifo);
+//void FIFO_print (FIFO_Buf_t* fifo);
 
 
 

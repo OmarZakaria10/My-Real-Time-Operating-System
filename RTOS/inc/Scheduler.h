@@ -32,7 +32,7 @@ typedef struct {
 	} TaskState;
 	struct {
 		enum {
-			Disable_blocking, Enable_blocking
+			Enable_blocking,Disable_blocking
 		} BlockingState;
 		unsigned int Ticks_Count;
 	} TimeWaiting;
@@ -41,5 +41,9 @@ typedef struct {
 
 MYRTOS_ErrorID MYRTOS_Init();
 MYRTOS_ErrorID MYRTOS_CreateTask(TASK *Tref);
+void MYRTOS_ActivateTask (TASK* Tref);
+void MYRTOS_TerminateTask (TASK* Tref);
+void MYRTOS_StartOS();
+#define element_type TASK*
 
 #endif /* INC_SCHEDULER_H_ */

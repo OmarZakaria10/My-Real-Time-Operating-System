@@ -8,27 +8,27 @@
 #ifndef INC_CORTEXMX_OS_PORTING_H_
 #define INC_CORTEXMX_OS_PORTING_H_
 
-#include "ARMCM3.h"
+
 #include "core_cm3.h"
 extern int _estack;
-extern int _eheab ;
+extern int _eheap ;
 #define MainStackSize	3072
-#define OS_SET_PSP(add)				__asm("MOV R0,%0 \t\n MSR PSP,R0" : :"r"(add))
-#define OS_GET_PSP(add)				__asm("MRS R0,PSP \t\n MOV %0,R0" : :"=r"(add))
-#define OS_Switch_SP_PSP			__asm("MRS R0,CONTROL \t\n ORR R0,R0,#0x2 \t\n MSR CONTROL,R0")
-#define OS_Switch_SP_MSP			__asm("MRS R0,CONTROL \t\n AND R0,R0,#0x5 \t\n MSR CONTROL,R0")
+#define OS_SET_PSP(add)              __asm volatile("mov r0,%0 \n\t msr PSP,r0" : : "r" (add) )
+#define OS_GET_PSP(add)              __asm volatile("mrs r0,PSP \n\t mov %0,r0"   : "=r" (add) )
+#define OS_SWITCH_SP_to_PSP          __asm volatile("mrs r0, CONTROL \n\t mov r1,#0x02 \n\t orr r0,r0,r1 \n\t msr CONTROL,r0")
+#define OS_SWITCH_SP_to_MSP          __asm volatile("mrs r0, CONTROL \n\t mov r1,#0x05 \n\t and r0,r0,r1 \n\t msr CONTROL,r0")
 
-#define CPU_Access_Level_Unprivileged(){__asm("MRS R3,CONTROL");\
-		__asm("ORR R3,R0,#0x01");\
-		__asm("MSR CONTROL,R3");\
-}
+//clear Bit 0 CONTROL register
+#define OS_SWITCH_to_privileged   		__asm(" mrs r3, CONTROL  \n\t" \
+										" lsr r3,r3,#0x1   \n\t"       \
+										" lsl r3,r3,#0x1   \n\t"	   \
+										" msr CONTROL, r3");
 
-#define CPU_Access_Level_Privileged(){__asm("MRS R3,CONTROL");\
-		__asm("LSR R3,R3,#0x01");\
-		__asm("LSL R3,R3,#0x01");\
-		__asm("MSR CONTROL,R3");\
-}
+//set Bit 0 CONTROL register
+#define OS_SWITCH_to_unprivileged		__asm(" mrs r3, CONTROL  \n\t" \
+											  " orr r3,r3,#0x1   \n\t" \
+											  " msr CONTROL, r3 ");
 
-
-
+void trigger_OS_PendSV();
+void Start_Ticker();
 #endif /* INC_CORTEXMX_OS_PORTING_H_ */

@@ -41,7 +41,7 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-MY_RTOS.elf \
+MY_RTOS.axf \
 
 SIZE_OUTPUT += \
 default.size.stdout \
@@ -54,11 +54,11 @@ MY_RTOS.bin \
 
 
 # All Target
-all: MY_RTOS.elf secondary-outputs
+all: MY_RTOS.axf secondary-outputs
 
 # Tool invocations
-MY_RTOS.elf: $(OBJS) $(USER_OBJS) C:\Users\GTX\STM32CubeIDE\workspace_1.4.0\MY_RTOS\STM32F103C8TX_FLASH.ld
-	arm-none-eabi-gcc  -gdwarf-2 -o "MY_RTOS.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\GTX\STM32CubeIDE\workspace_1.4.0\MY_RTOS\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="MY_RTOS.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+MY_RTOS.axf: $(OBJS) $(USER_OBJS) C:\Users\GTX\STM32CubeIDE\workspace_1.4.0\MY_RTOS\STM32F103C8TX_FLASH.ld
+	arm-none-eabi-gcc  -gdwarf-2 -o "MY_RTOS.axf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\GTX\STM32CubeIDE\workspace_1.4.0\MY_RTOS\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="MY_RTOS.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
