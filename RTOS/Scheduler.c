@@ -115,7 +115,7 @@ void MYRTOS_IdleTask()
 	while(1)
 	{
 		IdleTaskLed ^= 1 ;
-		__asm("NOP");
+		__asm("wfe");
 	}
 
 }
@@ -378,9 +378,63 @@ void MYRTOS_StartOS(){
 	OS_SWITCH_to_unprivileged;
 	MYRTOS_idleTask.p_TaskEntry();
 
-
 }
 
+void MYRTOS_Update_TasksWaitingTime()
+{
+	for (int i =0; i < OS_Control.N_Active_Tasks ; i++  )
+	{
+		if (OS_Control.OSTasks[i]->TaskState == Suspended) //it is blocking until meet the time line
+		{
+			if (OS_Control.OSTasks[i]->TimeWaiting.BlockingState == Enable_blocking)
+			{
+				OS_Control.OSTasks[i]->TimeWaiting.Ticks_Count-- ;
+				if (OS_Control.OSTasks[i]->TimeWaiting.Ticks_Count == 1)
+				{
+					OS_Control.OSTasks[i]->TimeWaiting.BlockingState = Disable_blocking ;
+					OS_Control.OSTasks[i]->TaskState = Waiting ;
+					MYRTOS_OS_SVC_Set(SVC_TaskWaitingTime);
+				}
+			}
+		}
+	}
+}
+
+
+MYRTOS_ErrorID MYRTOS_AcquireMutex(Mutex_ref* Mref , TASK* Tref)
+{
+	if(Mref->CurrentTUser == NULL) //not used
+	{
+		Mref->CurrentTUser = Tref ;
+	}else
+	{
+		if(Mref->NextTUser == NULL)
+		{
+			Mref->NextTUser = Tref ;
+			//move to Suspend state until be released
+			Tref->TaskState = Suspended ;
+			//to be suspended immediately
+			MYRTOS_OS_SVC_Set(SVC_terminateTask);
+		}else
+		{
+			return MutexisReacedToMaxNumberOfUsers ;
+		}
+
+	}
+	return NoError ;
+}
+void MYRTOS_ReleaseMutex(Mutex_ref* Mref)
+{
+	if(Mref->CurrentTUser != NULL)
+	{
+		Mref->CurrentTUser = Mref->NextTUser  ;
+		Mref->NextTUser  = NULL ;
+		Mref->CurrentTUser->TaskState = Waiting ;
+		MYRTOS_OS_SVC_Set(SVC_Activatetask);
+
+	}
+
+}
 
 
 

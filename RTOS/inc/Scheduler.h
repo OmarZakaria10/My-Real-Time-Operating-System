@@ -11,7 +11,7 @@
 #include "CortexMX_OS_Porting.h"
 
 typedef enum {
-	NoError, Ready_Queue_init_error, Task_exceeded_StackSize
+	NoError, Ready_Queue_init_error, Task_exceeded_StackSize, MutexisReacedToMaxNumberOfUsers
 } MYRTOS_ErrorID;
 
 typedef enum {
@@ -39,11 +39,24 @@ typedef struct {
 
 } TASK;
 
+typedef struct {
+	unsigned char* Ppayload;
+	unsigned int   PayloadSize ;
+	TASK* 	   CurrentTUser ;
+	TASK* 	   NextTUser ;
+	char 		   MutexName[30]  ;
+} Mutex_ref;
+
+#define element_type TASK*
+
 MYRTOS_ErrorID MYRTOS_Init();
 MYRTOS_ErrorID MYRTOS_CreateTask(TASK *Tref);
 void MYRTOS_ActivateTask (TASK* Tref);
 void MYRTOS_TerminateTask (TASK* Tref);
 void MYRTOS_StartOS();
-#define element_type TASK*
+void MYRTOS_TaskWait(unsigned int NoTICKS,TASK* SelfTref);
+
+MYRTOS_ErrorID MYRTOS_AcquireMutex(Mutex_ref* Mref , TASK* Tref);
+void MYRTOS_ReleaseMutex(Mutex_ref* Mref);
 
 #endif /* INC_SCHEDULER_H_ */

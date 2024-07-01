@@ -12,3 +12,6 @@ Scheduler.c:337:5:MYRTOS_OS_SVC_Set	16	static,ignoring_inline_asm
 Scheduler.c:362:6:MYRTOS_ActivateTask	16	static
 Scheduler.c:366:6:MYRTOS_TerminateTask	16	static
 Scheduler.c:371:6:MYRTOS_StartOS	8	static,ignoring_inline_asm
+Scheduler.c:383:6:MYRTOS_Update_TasksWaitingTime	16	static
+Scheduler.c:404:16:MYRTOS_AcquireMutex	16	static
+Scheduler.c:426:6:MYRTOS_ReleaseMutex	16	static
